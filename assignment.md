@@ -15,6 +15,9 @@ Using the `claim` and `car` tables, write a SQL query to return a table containi
 Answer:
 
 ```sql
+SELECT CLAIM.ID, CLAIM_DATE, TRAVEL_TIME, CLAIM_AMT, CAR_TYPE, CAR_USE FROM CLAIM 
+INNER JOIN CAR ON CLAIM.CAR_ID = CAR.ID ;
+
 
 ```
 
@@ -25,6 +28,9 @@ Write a SQL query to compute the running total of the `travel_time` column for e
 Answer:
 
 ```sql
+SELECT ID, CAR_ID, TRAVEL_TIME, SUM(TRAVEL_TIME) OVER
+ (PARTITION BY CAR_ID ORDER BY ID) AS RUNNING_TOTAL
+FROM CLAIM;
 
 ```
 
@@ -35,6 +41,14 @@ Using a Common Table Expression (CTE), write a SQL query to return a table conta
 Answer:
 
 ```sql
+WITH AVG_RESALE_VALUE_CAR_USE AS (
+SELECT 	CAR_USE,AVG(RESALE_VALUE) AS AVG_RESALE_VALUE
+FROM CAR
+GROUP BY CAR_USE )
+SELECT ID, 	RESALE_VALUE, C1.CAR_USE
+FROM CAR C1 INNER JOIN AVG_RESALE_VALUE_CAR_USE  C2 ON C1.CAR_USE = C2.CAR_USE
+WHERE RESALE_VALUE < AVG_RESALE_VALUE;
+
 
 ```
 
